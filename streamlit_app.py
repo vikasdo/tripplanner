@@ -82,7 +82,7 @@ def generate_response(input_text):
 
 
 with st.form('my_form'):
-    text = st.text_area('Enter text:', 'What are the three key pieces of advice for learning how to code?')
+    text = st.text_area('Enter text:', 'Plan a 3 day trip to kerala')
     submitted = st.form_submit_button('Submit')
 
     if submitted:
