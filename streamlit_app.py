@@ -77,7 +77,7 @@ def generate_response(input_text, destination, days, travelstyle, interests, sta
         ]
     )
     input_text = f"""
-    Plan a {days}-day trip to {destination} from {start_point} with a {travelstyle} travel style.
+    Plan a {days}-day trip to {destination} from {startPoint} with a {travelstyle} travel style.
     with interests include {interests}. share it in Good format so it attracts friends
     """
     response = chat_session.send_message(input_text)
@@ -86,7 +86,6 @@ def generate_response(input_text, destination, days, travelstyle, interests, sta
 
 
 with st.form('my_form'):
-    text = st.text_area('Enter text:', 'Plan a 3 day trip to kerala')
     destination = st.text_area('Enter Destination:', 'Goa')
     days = st.number_input("No of days:",step=1,value=1)
     travelstyle = st.radio(
