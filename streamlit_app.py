@@ -76,6 +76,10 @@ def generate_response(input_text):
             },
         ]
     )
+    input_text = f"""
+    Plan a {days}-day trip to {destination} from {start_point} with a {travelstyle} travel style.
+    with interests include {interests}. share it in Good format so it attracts friends
+    """
     response = chat_session.send_message(input_text)
 
     st.info(response.text)
@@ -100,4 +104,4 @@ with st.form('my_form'):
     submitted = st.form_submit_button('Submit')
 
     if submitted:
-        generate_response(text)
+        generate_response(text, destination, days, travelstyle, interests, start_point)
