@@ -33,7 +33,7 @@ def initiatemodel(openai_api_key):
     return model
 
 
-def generate_response(input_text, destination, days, travelstyle, interests, startPoint):
+def generate_response( destination, days, travelstyle, interests, startPoint):
     llm = initiatemodel(st.secrets["api_token"])
     chat_session = llm.start_chat(
         history=[
@@ -103,4 +103,4 @@ with st.form('my_form'):
     submitted = st.form_submit_button('Submit')
 
     if submitted:
-        generate_response(text, destination, days, travelstyle, interests, startPoint)
+        generate_response( destination, days, travelstyle, interests, startPoint)
