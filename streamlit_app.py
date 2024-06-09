@@ -1,4 +1,5 @@
 import streamlit as st
+from datetime import datetime
 
 import os
 import google.generativeai as genai
@@ -23,19 +24,22 @@ def initiatemodel(openai_api_key):
     }
 
     model = genai.GenerativeModel(
-        model_name="gemini-1.5-flash",
+        model_name="gemini-1.5-pro",
         generation_config=generation_config,
         # safety_settings = Adjust safety settings
         # See https://ai.google.dev/gemini-api/docs/safety-settings
         system_instruction="You are an Indian travel guide and have a lot of experience leading a trip  with lot of people\\nand also have an idea to fit budget trip frugally with attention to detailou are an Indian travel guide and have a lot of experience leading a trip  with lot of people and also have an idea to fit budget trip frugally with attention to detailSuggest me some good 4-5 star hotels and resorts in Bali I can stay in. Make sure to keep my itinerary in mind and ensure it’s not too far from the things I want to do. Also, include a rough price estimate for each hotel Suggest me quick and affordable trains to get to kerala from hyderabad, India . Include the names of the train express, how long they will take, and also add a rough estimate of how much each will cost.With all the information I have selected, create two different tables summarising my final itinerary in detail, the entire budget, emergency numbers, customs, and safety. Keep the customs and safety brief.",
     )
-
     return model
 
 
-def generate_response( destination, days, travelstyle, interests, startPoint):
-    llm = initiatemodel(st.secrets["api_token"])
-    chat_session = llm.start_chat(
+def generate_response(**kwargs):
+    # Example implementation of generate_response
+    # model = initiatemodel("AIzaSyDokE26-NFbKJbiPLlD2zLE-mxr7dopPjk")
+    model = initiatemodel(st.secrets["api_token"])
+
+
+    chat_session = model.start_chat(
         history=[
             {
                 "role": "user",
@@ -65,7 +69,7 @@ def generate_response( destination, days, travelstyle, interests, startPoint):
             {
                 "role": "user",
                 "parts": [
-                    "trip to kerala\n",
+                    "trip to kerala \ntravel type : Budget \npeople :3\ninterests : Adventure ,Relaxation\nTransport : Bus and train\n\n",
                 ],
             },
             {
@@ -74,33 +78,57 @@ def generate_response( destination, days, travelstyle, interests, startPoint):
                     "Okay, let's plan your Kerala trip!  To give you the best suggestions, please tell me a bit more about what you're looking for:\n\n**1. What are your main interests?**\n\n* **Relaxation:**  Beaches, backwaters, Ayurvedic treatments\n* **Adventure:**  Trekking, wildlife safaris, water sports\n* **Culture:**  Temples, festivals, traditional dance, local cuisine\n* **History:**  Fort Kochi, colonial architecture, historical sites\n\n**2.  What is your budget?**\n\n* This will help me suggest accommodations and activities that fit your budget.\n\n**3.  What dates are you looking to travel?**\n\n*  Knowing your dates will help me suggest the best time to visit based on the weather and festivals.\n\n**4.  How many people are travelling?**\n\n*  This will impact transportation and accommodation choices.\n\n**5.  What type of accommodation are you looking for?**\n\n*  Luxury resorts, budget-friendly homestays, charming boutique hotels?\n\nOnce I have this information, I can create a detailed itinerary, including:\n\n* **Flights and transportation**\n* **Accommodation recommendations**\n* **Activities and attractions**\n* **Food and dining suggestions**\n* **Travel tips and safety advice**\n\nI'm excited to help you plan your Kerala adventure! \n",
                 ],
             },
+            {
+                "role": "user",
+                "parts": [
+                    "trip to kerala \ntravel type : Budget \npeople :3\ninterests : Adventure ,Relaxation\nTransport : Bus and train\n\n\n",
+                ],
+            },
+            {
+                "role": "model",
+                "parts": [
+                    "Perfect! Let’s plan an adventure and relaxation-filled budget trip to Kerala for 3, using buses and trains. \n\n**Here’s a possible 5-day itinerary:**\n\n**Day 1: Arrival in Kochi & Fort Kochi Exploration**\n\n* **Morning:**  Arrive in Kochi (Ernakulam Railway Station or Bus Stand). Plenty of trains and buses run from Hyderabad to Kochi.\n* **Check-in:**  Head to Fort Kochi (easily accessible by local bus or ferry) and check into a budget-friendly homestay or guesthouse.\n* **Afternoon:**  Explore Fort Kochi on foot!\n    * **Chinese Fishing Nets:** Witness the unique fishing technique.\n    * **St. Francis Church:** The oldest European church in India.\n    * **Santa Cruz Basilica:** Admire its beautiful architecture.\n    * **Jewish Synagogue & Jew Town:** Explore the historical area. \n* **Evening:**  Enjoy a relaxed dinner at a local eatery, savoring Kerala’s delicious seafood and traditional dishes.\n\n**Day 2: Backwaters Bliss in Alleppey**\n\n* **Morning:**  Take a local bus or train from Kochi to Alleppey (approx. 2 hours).\n* **Backwater Experience:** In Alleppey, opt for a budget-friendly shared houseboat tour. This is more affordable than private houseboats and still provides the magical backwater experience.  \n* **Afternoon/Evening:** Cruise through the serene backwaters, enjoying the lush landscapes, village life, and delicious food served onboard.\n\n**Day 3: Munnar’s Tea-Scented Hills**\n\n* **Morning:**  After breakfast, take a state-run bus from Alleppey to Munnar (approx. 5-6 hours). Buses are frequent and scenic.\n* **Check-in:**  Arrive in Munnar and check into a budget-friendly hotel or homestay amidst the tea gardens.\n* **Afternoon:**  Take a stroll through the tea plantations, breathe in the fresh air, and enjoy the stunning views. \n* **Evening:** Relax at your accommodation or explore Munnar town. \n\n**Day 4:  Munnar Adventures & Waterfalls**\n\n* **Morning:**  Head to the Eravikulam National Park (Rajamalai) for a chance to spot the Nilgiri Tahr (mountain goat). Book bus tickets in advance.\n* **Afternoon:**  Visit the beautiful Attukad Waterfalls. You can also explore the nearby Mattupetty Dam and lake, taking a scenic boat ride (optional).\n* **Evening:**  Enjoy dinner and relax in Munnar, reminiscing about your adventures.\n\n**Day 5: Departure**\n\n* **Morning:**  Enjoy a final Kerala breakfast and depending on your departure time, you can explore more of Munnar or head back to Kochi to catch your train/bus to Hyderabad. \n\n**Budget Tips:**\n\n* **Accommodation:** Homestays, guesthouses, and budget hotels are plentiful. Book in advance during peak season.\n* **Transportation:** State-run buses are very affordable. For shorter distances, consider local buses or auto-rickshaws. Negotiate fares beforehand.\n* **Food:** Eat at local eateries for the best prices and authentic flavors. Kerala cuisine is delicious and affordable! \n* **Activities:** Choose shared tours or explore independently to save costs. \n* **Bargaining:** It’s customary to bargain at markets and with auto-rickshaw drivers.\n\n**Remember:** This is just a suggestion, you can tailor it to your liking! \n\nLet me know if you have any specific questions about transportation options, accommodation suggestions, or things to do. I’m happy to help you plan your dream Kerala adventure on a budget! \n",
+                ],
+            },
+            {
+                "role": "user",
+                "parts": [
+                    "Based on the trip you created, what will be the total expense of traveling around and just enjoying myself for just one person? Exclude hotel and flights.\n\n\n",
+                ],
+            },
+            {
+                "role": "model",
+                "parts": [
+                    "Here’s a breakdown of the estimated expenses per person for your Kerala trip (excluding hotels and flights), assuming you'll share most costs with your group of 3:\n\n**Day 1: Kochi Arrival & Fort Kochi:**\n\n* Local transport (airport/station to Fort Kochi): ₹100 - ₹200 (bus or ferry)\n* Fort Kochi entrance fees (churches, synagogue): ₹100 - ₹150 (combined)\n* Dinner: ₹250 - ₹400\n\n**Day 2: Alleppey Backwaters:**\n\n* Kochi to Alleppey bus/train:  ₹80 - ₹150 \n* Shared houseboat tour (per person):  ₹700 - ₹1200 (negotiate for group discount)\n\n**Day 3: Munnar Travel & Exploration:**\n\n* Alleppey to Munnar bus: ₹150 - ₹250\n* Tea plantation walk: Free (or nominal fee at some estates)\n* Dinner: ₹200 - ₹350 \n\n**Day 4: Munnar Adventures:**\n\n* Bus to Eravikulam National Park: ₹50 - ₹80\n* National Park entry fee: ₹100 - ₹150 \n* Bus to waterfalls & local transport: ₹100 - ₹150\n* Dinner: ₹200 - ₹350\n\n**Day 5: Departure:**\n\n* Local transport to Kochi & meals: ₹300 - ₹500 (depending on time)\n\n**Total Estimated Expenses (excluding hotels & flights) per person:**\n\n**Lower end:** ₹2030 - ₹2380  \n**Higher end:** ₹3080 - ₹3830\n\n**Important Notes:**\n\n* This is a rough estimate. Prices may vary depending on your choices, bargaining skills, and seasonality.\n* You can lower costs further by: \n    * Eating at very local, smaller eateries. \n    * Choosing more budget-friendly transportation (sharing auto-rickshaws when possible).\n    * Avoiding peak season travel.\n\nRemember: Always keep some buffer money for unexpected expenses. Have a fantastic and affordable Kerala trip! \n",
+                ],
+            },
         ]
     )
     input_text = f"""
-    Plan a {days}-day trip to {destination} from {startPoint} with a {travelstyle} travel style.
-    with interests include {interests}. share it in Good format so it attracts friends
+    Planning a {kwargs['days']}-day trip to {kwargs['destination']} from {kwargs['start_point']} with a {kwargs['travelstyle']} travel style transport mode {kwargs['transportMode']} for month {kwargs['month']}
+    Your interests include {kwargs['interests']}. share it in Good format so it attracts friends
     """
     response = chat_session.send_message(input_text)
 
     st.info(response.text)
 
 
+# Creating the form
 with st.form('my_form'):
-    destination = st.text_area('Enter Destination:', 'Goa')
-    days = st.number_input("No of days:",step=1,value=1)
-    travelstyle = st.radio(
-        "Travel Style",
-        ["budget friendly ", "***luxury***"],
-        index=0,
-    )
-
-    interests = st.selectbox(
-        "What are your Interests ?",
-        ("beaches", " back waters ", "culture","party"))
-
-    startPoint = st.text_area('Enter startPoint:', 'Hyderabad ')
+    form_data = dict(destination=st.text_area('Enter Destination:', 'kerala'),
+                     days=st.number_input("No of days:", step=1, value=1), travelstyle=st.radio(
+            "Travel Style",
+            ["budget friendly", "luxury"],
+            index=0,
+        ), interests=st.selectbox(
+            "What are your Interests?",
+            ("beaches", "back waters", "culture", "party")
+        ), transportMode=st.selectbox(
+            "What are your Interests?",
+            ("Bus", "Train", "Flight")
+        ), start_point=st.text_area('Enter startPoint:', 'Hyderabad'), month=datetime.now().strftime('%B'))
 
     submitted = st.form_submit_button('Submit')
 
     if submitted:
-        generate_response( destination, days, travelstyle, interests, startPoint)
+        generate_response(**form_data)
