@@ -6,7 +6,6 @@ import google.generativeai as genai
 st.set_page_config(page_title=" Trip planner App")
 st.title(' plan your trip')
 
-openai_api_key = st.sidebar.text_input('gemini API Key')
 
 
 
@@ -35,7 +34,7 @@ def initiatemodel(openai_api_key):
 
 
 def generate_response(input_text):
-    llm = initiatemodel(openai_api_key)
+    llm = initiatemodel(st.secrets["api_token"])
     chat_session = llm.start_chat(
         history=[
             {
