@@ -35,7 +35,7 @@ def initiatemodel(openai_api_key):
 
 def generate_response(**kwargs):
     # Example implementation of generate_response
-    # model = initiatemodel("AIzaSyDokE26-NFbKJbiPLlD2zLE-mxr7dopPjk")
+ 
     model = initiatemodel(st.secrets["api_token"])
 
 
